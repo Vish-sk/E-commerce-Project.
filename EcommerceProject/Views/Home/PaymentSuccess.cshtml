@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "Payment Success";
+}
+
+<div class="container mt-5 text-center">
+    <h2 class="text-success">Payment Successful!</h2>
+    <p>Your payment was successful. Order has been placed.</p>
+    <p><strong>Payment ID:</strong> @ViewBag.PaymentId</p>
+    <a href="/home/ProductView" class="btn btn-success">Continue Shopping</a>
+</div>

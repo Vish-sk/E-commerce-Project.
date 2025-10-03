@@ -1,0 +1,42 @@
+﻿@using EcommerceProject.Views.Dto
+@model BuyNowDTO
+
+@{
+    ViewData["Title"] = "Payment";
+    var amountInPaise = (int)(Model.Total * 100);
+}
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<div class="container mt-5 text-center">
+    <h2>Confirm Payment</h2>
+    <p>Product: <strong>@Model.ProductName</strong></p>
+    <p>Total: <strong>₹@Model.Total</strong></p>
+
+    <button class="btn btn-primary" onclick="payNow()">Pay with Razorpay</button>
+</div>
+
+<script>
+    function payNow() {
+        var options = {
+            "key": "rzp_test_QHNzawVMEUNHOA", // Replace with your Razorpay Key
+            "amount": "@amountInPaise",
+            "currency": "INR",
+            "name": "Ecommerce Site",
+            "description": "Order Payment",
+            "handler": function (response) {
+                window.location.href = "/Home/PaymentSuccess?paymentId=" + response.razorpay_payment_id;
+            },
+            "prefill": {
+                "name": "@Model.CustomerName",
+                "email": "test@example.com"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+    }
+</script>

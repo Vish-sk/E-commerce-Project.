@@ -1,0 +1,207 @@
+﻿@using EcommerceProject.Views.Dto
+@model SellerRegistrationDTO
+
+@{
+    ViewData["Title"] = "Seller Registration";
+}
+
+<style>
+    :root {
+        --primary-color: #ff9900; /* Amazon orange */
+        --secondary-color: #146eb4; /* Flipkart blue */
+        --light-gray: #f3f3f3;
+        --dark-gray: #555;
+        --white: #ffffff;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+        background-color: var(--light-gray);
+        font-family: 'Amazon Ember', Arial, sans-serif;
+    }
+
+    .registration-container {
+        max-width: 500px;
+        margin: 2rem auto;
+        padding: 0 15px;
+    }
+
+    .registration-card {
+        background-color: var(--white);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .registration-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+    }
+
+        .registration-header h1 {
+            color: var(--secondary-color);
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .registration-header p {
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-control {
+        height: 45px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        padding: 0.5rem 1rem;
+        font-size: 15px;
+        transition: all 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(20, 110, 180, 0.1);
+        }
+
+    label {
+        font-weight: 500;
+        font-size: 14px;
+        color: var(--dark-gray);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .btn-register {
+        background-color: var(--primary-color);
+        border: none;
+        color: white;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 4px;
+        width: 100%;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .btn-register:hover {
+            background-color: #e68a00;
+        }
+
+    .login-link {
+        text-align: center;
+        font-size: 14px;
+        color: var(--dark-gray);
+    }
+
+        .login-link a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+            .login-link a:hover {
+                text-decoration: underline;
+                color: #0d5a9b;
+            }
+
+    .alert {
+        border-radius: 4px;
+        padding: 12px 15px;
+        margin-bottom: 1.5rem;
+        font-size: 14px;
+    }
+
+    .text-danger {
+        font-size: 13px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .input-hint {
+        font-size: 12px;
+        color: #777;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="registration-container">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <div class="registration-card">
+        <div class="registration-header">
+            <h1>Create your seller account</h1>
+            <p>Start selling to millions of customers today</p>
+        </div>
+
+        <form asp-action="SelleRregistration">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="CompanyName">Business/Company Name</label>
+                <input asp-for="CompanyName" class="form-control" placeholder="Enter your business name" />
+                <span asp-validation-for="CompanyName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="GSTNO">GST Number</label>
+                <input asp-for="GSTNO" maxlength="15" class="form-control" placeholder="15-digit GST number" />
+                <span asp-validation-for="GSTNO" class="text-danger"></span>
+                <div class="input-hint">Example: 22AAAAA0000A1Z5</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MobileNumber">Mobile Number</label>
+                <input asp-for="MobileNumber" type="tel" maxlength="10" class="form-control" placeholder="10-digit mobile number" />
+                <span asp-validation-for="MobileNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email">Email Address</label>
+                <input asp-for="Email" type="email" class="form-control" placeholder="Enter your email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">Password</label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="At least 6 characters" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+                <div class="input-hint">Passwords must be at least 6 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ConfirmPassword">Re-enter Password</label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Re-enter your password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn-register">Register as Seller</button>
+        </form>
+    </div>
+
+    <div class="login-link">
+        Already have an account? <a asp-action="SellerLogin">Sign in</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

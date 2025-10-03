@@ -1,0 +1,212 @@
+﻿@using EcommerceProject.Views.Dto
+@model VerifyOtpDTO
+@{
+    ViewData["Title"] = "Verify OTP";
+}
+
+<style>
+
+
+
+
+    /* Full page container */
+    .otp-body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh; /* full viewport height */
+        background: linear-gradient(135deg, #f2f2f2, #ffffff);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 20px; /* prevents overflow on small screens */
+      
+    }
+
+    /* OTP card */
+    .amazon-otp-card {
+        background: #fff;
+        padding: 40px 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .otp-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #111;
+    }
+
+    .otp-subtitle {
+        font-size: 16px;
+        margin-bottom: 25px;
+        color: #555;
+    }
+
+    .error-message {
+        color: #d9534f;
+        margin-bottom: 15px;
+        font-weight: 500;
+    }
+
+    .otp-inputs {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 25px;
+    }
+
+    .otp-digit {
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        font-size: 24px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+        .otp-digit:focus {
+            border-color: #ff9900;
+            box-shadow: 0 0 5px rgba(255,153,0,0.5);
+        }
+
+    .amazon-btn {
+        background-color: #ff9900;
+        color: #fff;
+        border: none;
+        padding: 14px 0;
+        font-size: 16px;
+        font-weight: 600;
+        width: 100%;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .amazon-btn:hover {
+            background-color: #e68a00;
+        }
+
+    .resend-otp {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #555;
+    }
+
+        .resend-otp a {
+            color: #ff9900;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+            .resend-otp a:hover {
+                text-decoration: underline;
+            }
+
+    @@media(max - width: 480px)
+
+    {
+        .otp-digit
+
+    {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .otp-title {
+        font-size: 24px;
+    }
+
+    }
+</style>
+
+<div class="otp-body">
+    <div class="amazon-otp-card">
+        <h1 class="otp-title">Verify OTP</h1>
+        <p class="otp-subtitle">Enter the 4-digit OTP sent to <strong>@TempData["VerifyEmail"]</strong></p>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="error-message">@ViewBag.Error</div>
+        }
+
+        <form asp-action="VerifyOtp" method="post" id="otpForm">
+            <input type="hidden" asp-for="OtpCode" id="fullOtp" />
+
+            <div class="otp-inputs">
+                @for (int i = 0; i < 4; i++)
+                {
+                    <input type="text" maxlength="1"
+                           class="otp-digit"
+                           data-index="@i"
+                           pattern="[0-9]*"
+                           inputmode="numeric" />
+                }
+            </div>
+
+            <button type="submit" class="verify-btn amazon-btn">Verify OTP</button>
+        </form>
+
+        <div class="resend-otp">
+            Didn't receive OTP?
+            <a href="#" onclick="resendOtp()">Resend OTP</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const digits = document.querySelectorAll('.otp-digit');
+            const fullOtp = document.getElementById('fullOtp');
+
+            digits[0].focus();
+
+            digits.forEach((digit, index) => {
+                digit.addEventListener('input', (e) => {
+                    digit.value = digit.value.replace(/\D/g, '');
+                    if (digit.value.length === 1 && index < 3) digits[index + 1].focus();
+                    updateFullOtp();
+                });
+
+                digit.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !digit.value && index > 0) digits[index - 1].focus();
+                });
+            });
+
+            function updateFullOtp() {
+                fullOtp.value = Array.from(digits).map(d => d.value).join('');
+            }
+
+            document.getElementById('otpForm').addEventListener('submit', function(e) {
+                updateFullOtp();
+                if (fullOtp.value.length !== 4) {
+                    e.preventDefault();
+                    alert('Please enter the complete 4-digit OTP');
+                }
+            });
+        });
+
+        function resendOtp() {
+            fetch('/Home/ResendOtp', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('New OTP sent successfully!');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            });
+        }
+    </script>
+}

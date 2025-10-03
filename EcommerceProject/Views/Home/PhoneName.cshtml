@@ -1,0 +1,51 @@
+﻿@using EcommerceProject.Views.Dto
+@model CustomerRegisterDTO
+@{
+    ViewData["Title"] = "Enter Details";
+}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <form asp-action="SavePhoneName" method="post">
+            <input type="hidden" asp-for="Email" />
+
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Phone"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+            @* <div class="form-group"> *@
+            @*     <label asp-for="Address"></label> *@
+            @*     <input asp-for="Address" class="form-control" /> *@
+            @*     <span asp-validation-for="Address" class="text-danger"></span> *@
+            @* </div> *@
+
+            @* <div class="form-group"> *@
+            @*     <label asp-for="City"></label> *@
+            @*     <input asp-for="City" class="form-control" /> *@
+            @*     <span asp-validation-for="City" class="text-danger"></span> *@
+            @* </div> *@
+
+            @* <div class="form-group"> *@
+            @*     <label asp-for="PostalCode"></label> *@
+            @*     <input asp-for="PostalCode" class="form-control" /> *@
+            @*     <span asp-validation-for="PostalCode" class="text-danger"></span> *@
+            @* </div> *@
+
+            <button type="submit" class="btn btn-primary">Continue to OTP</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

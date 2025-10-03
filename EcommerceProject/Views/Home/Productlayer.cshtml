@@ -1,0 +1,67 @@
+﻿@using EcommerceProject.Views.Dto
+@model UploadDTO
+
+@{
+    ViewData["Title"] = "Productlayer";
+}
+
+<div class="container my-5">
+    <div class="card shadow-lg p-4" style="background-color: #ffffff; border-radius: 12px;">
+        <div class="row g-4">
+
+            <!-- Left Side: Product Image + Buttons -->
+            
+            <div class="col-md-5 d-flex flex-column align-items-center justify-content-start">
+                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 10px; border: 1px solid #e0e0e0; width: 100%;">
+                    @* <p style="color: red;">🔍 Image Path Debug: @Model.ImagePath</p> *@
+
+                    <img src="@Model.ImagePath" alt="@Model.ProductName"
+                         style="max-height: 350px; width: 100%; object-fit: contain;" />
+                </div>
+
+                <!-- Buttons -->
+                <div class="mt-4 d-flex gap-3">
+                    <a class="btn btn-warning btn-lg px-4" onclick="addToCart(@Model.Id)">Add to Cart</a>
+
+                    <a href="/Home/BuyNow?Id=@Model.Id" class="btn btn-success btn-lg px-4">Buy Now</a>
+                </div>
+            </div>
+
+
+            <!-- Right Side: Product Details -->
+            <div class="col-md-7">
+                <h2 class="fw-bold mb-3" style="color: #212121;">@Model.ProductName</h2>
+
+                <div class="mb-2">
+                    <span class="badge bg-success fs-6">4.4 ★</span>
+                    <span class="text-muted ms-2">1,553 Ratings & 258 Reviews</span>
+                </div>
+
+                <h3 class="text-success fw-semibold mb-2">₹@Model.Price</h3>
+                @* <p class="text-danger mb-3">Special Price: Extra ₹4000 off</p> *@
+
+                <!-- Product Details Display -->
+                <div class="mb-4">
+                    <dl class="row">
+                        <dt class="col-sm-3 text-secondary">Description</dt>
+                        <dd class="col-sm-9 text-dark">@Model.Description</dd>
+
+                        <dt class="col-sm-3 text-secondary">Price</dt>
+                        <dd class="col-sm-9 text-dark">₹@Model.Price</dd>
+
+                        @* <dt class="col-sm-3 text-secondary">Image Path</dt> *@
+                        @* <dd class="col-sm-9 text-muted">@Model.ImagePath</dd> *@
+                    </dl>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex gap-3">
+               
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

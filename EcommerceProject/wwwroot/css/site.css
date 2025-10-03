@@ -1,0 +1,317 @@
+﻿/* Fonts & Reset */
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    list-style: none;
+    box-sizing: border-box;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Header section */
+.logo {
+    max-width: 130px;
+    height: auto;
+}
+
+button {
+    border: none;
+    background: none;
+}
+
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background-color: white;
+    padding: 40px 70px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+    z-index: 1005;
+}
+
+
+
+.nav-bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+    .nav-bar li {
+        padding: 0 10px;
+        line-height: 60px;
+        display: inline-block;
+        position: relative;
+        /* this relative used here for nave bar hover */
+    }
+
+        .nav-bar li a {
+            color: black;
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+            .nav-bar li a:hover, /* first it target ancor tag then hover, then anchor tag use the active class and it will be always brown */
+            .nav-bar li a.active {
+                color: rgb(188, 55, 55);
+            }
+
+                .nav-bar li a.active::after /* then the active class always show the underline and second class shows the underline */
+                .nav-bar li a:hover::after {
+                    content: "";
+                    width: 40%;
+                    background-color: rgb(188, 55, 55);
+                    height: 2px;
+                    position: absolute;
+                    bottom: 15px;
+                    left: 10px;
+                    transition: width 0.3s ease-in-out;
+                }
+
+.main-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 80px; /* Add enough margin to avoid overlapping */
+}
+
+
+.menubar {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 20px;
+    background-color: #333;
+    padding: 10px;
+}
+
+
+    .menubar li a {
+        color: rgb(239, 239, 239);
+        font-size: 16px;
+        font-weight: 400;
+    }
+
+.slider {
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: -16px
+    z-index: 1100; /* 👈 Must be higher than slider and header */
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    color: white;
+    overflow: hidden;
+    /* background-color: rgb(125, 36, 36); */
+}
+
+    .slide img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        /* ensures full image is visible */
+    }
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 2em;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    z-index: 10;
+}
+
+    .arrow.left {
+        left: 10px;
+    }
+
+    .arrow.right {
+        right: 10px;
+    }
+
+.dots {
+    text-align: center;
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+}
+
+.dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    background-color: #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+    .dot.active {
+        background-color: #333;
+    }
+
+.popup-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: none;
+    flex-direction: column;
+    min-width: 150px;
+    z-index: 1002;
+}
+
+    .popup-menu li {
+        padding: 10px;
+    }
+
+        .popup-menu li a {
+            color: black;
+            text-decoration: none;
+            display: block;
+        }
+
+        .popup-menu li:hover {
+            background-color: #f2f2f2;
+        }
+
+.threedot-container {
+    position: relative;
+    display: inline-block; /* ensures it wraps only the icon */
+}
+
+.threedot {
+    cursor: pointer;
+}
+
+
+/*hamburger menu code*/
+
+.hamburger-icon {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000; /* above header */
+}
+
+.hamburger-icon {
+    position: absolute;
+    top: 15%;
+    color: #ddd;
+}
+
+
+.sidebar-menu {
+    position: fixed;
+    top: 0;
+    left: -250px; /* hide by default */
+    width: 250px;
+    height: 100vh;
+    background-color: #111;
+    padding: 20px;
+    transition: left 0.3s ease;
+    z-index: 1006;
+}
+
+    .sidebar-menu ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        .sidebar-menu ul li {
+            margin: 20px 0;
+        }
+
+            .sidebar-menu ul li a {
+                color: white;
+                text-decoration: none;
+                font-size: 18px;
+            }
+
+    .sidebar-menu.show {
+        left: 0;
+    }
+
+
+
+/*
+close button code*/
+
+
+.close-btn {
+    color: white;
+    font-size: 24px;
+    text-align: right;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+
+//threedot
+
+.popup-menu {
+    display: none;
+    flex-direction: column;
+    min-width: 180px; /* keeps it wide enough */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 5px 0; /* less padding than before */
+    margin: 0;
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    right: 0; /* aligns right edge of menu to container */
+    z-index: 1002;
+    border-radius: 6px; /* optional for nicer look */
+}
+
+.popup-menu li a {
+    display: flex;
+    justify-content: space-between; /* text left, badge right */
+    align-items: center;
+    padding: 8px 15px; /* equal padding */
+    width: 100%;
+    text-decoration: none;
+    color: black;
+    box-sizing: border-box; /* ensures padding doesn't overflow */
+}
+
+    .popup-menu li a .badge {
+        min-width: 20px;
+        text-align: center;
+    }
+
+

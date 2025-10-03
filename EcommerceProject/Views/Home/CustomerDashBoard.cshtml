@@ -1,0 +1,617 @@
+﻿@model EcommerceProject.Views.Dto.CustomerDashBoardDTO
+@{
+    ViewData["Title"] = "Customer Dashboard";
+    Layout = null; // Or use your layout if you have one
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #2874f0;
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .search-bar {
+            display: flex;
+            width: 50%;
+        }
+
+            .search-bar input {
+                flex: 1;
+                padding: 10px;
+                border: none;
+                border-radius: 2px 0 0 2px;
+            }
+
+            .search-bar button {
+                padding: 10px 15px;
+                background: white;
+                border: none;
+                border-radius: 0 2px 2px 0;
+                cursor: pointer;
+            }
+
+        .user-actions a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .dashboard-container {
+            display: flex;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        .sidebar {
+            flex: 0 0 250px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+
+            .section-title i {
+                margin-right: 10px;
+                color: #3498db;
+            }
+
+        .menu-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+            .menu-item:hover {
+                background-color: #e8f4fc;
+                color: #3498db;
+            }
+
+            .menu-item.active {
+                background-color: #3498db;
+                color: white;
+            }
+
+            .menu-item i {
+                margin-right: 10px;
+                width: 20px;
+                text-align: center;
+            }
+
+        .sub-menu {
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .sub-menu-item {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+            .sub-menu-item:hover {
+                background-color: #e8f4fc;
+                color: #3498db;
+            }
+
+            .sub-menu-item.active {
+                background-color: #3498db;
+                color: white;
+            }
+
+        .info-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #3498db;
+        }
+
+        .info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .info-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .edit-btn {
+            color: #3498db;
+            cursor: pointer;
+            font-weight: 500;
+            padding: 5px 10px;
+            border: 1px solid #3498db;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+            .edit-btn:hover {
+                background-color: #3498db;
+                color: white;
+            }
+
+        .info-content {
+            font-size: 15px;
+            color: #34495e;
+        }
+
+        .gender-options {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .gender-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background-color: #ecf0f1;
+            margin: 20px 0;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .faq-answer {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+            .content-section.active {
+                display: block;
+            }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 500;
+            }
+
+            .form-group input, .form-group textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 15px;
+            }
+
+            .form-group textarea {
+                min-height: 100px;
+                resize: vertical;
+            }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+            .btn-primary:hover {
+                background-color: #2980b9;
+            }
+
+        @@media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                flex: 0 0 auto;
+                margin-bottom: 20px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+
+            .user-actions {
+                display: flex;
+                justify-content: space-around;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    @* <header> *@
+    @*     <div class="header-content"> *@
+    @*         <div class="logo">Flipkart</div> *@
+    @*         <div class="search-bar"> *@
+    @*             <input type="text" placeholder="Search for products, brands and more"> *@
+    @*             <button><i class="fas fa-search"></i></button> *@
+    @*         </div> *@
+    @*         <div class="user-actions"> *@
+    @*             <a href="#"><i class="fas fa-user"></i> Login</a> *@
+    @*             <a href="#"><i class="fas fa-shopping-cart"></i> Cart</a> *@
+    @*         </div> *@
+    @*     </div> *@
+    @* </header> *@
+
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="sidebar">
+                <div class="section-title">
+                    <i class="fas fa-user"></i> Personal Information
+                </div>
+
+                <div class="menu-item">
+                    <i class="fas fa-shopping-bag"></i> MY ORDERS
+                </div>
+
+                <div class="menu-item active" data-target="account-settings">
+                    <i class="fas fa-cog"></i> ACCOUNT SETTINGS
+                </div>
+                <div class="sub-menu">
+                    <div class="sub-menu-item active" data-target="profile-info">Profile Information</div>
+                    <div class="sub-menu-item" data-target="manage-address">Manage Addresses</div>
+                    <div class="sub-menu-item">PAN Card Information</div>
+                </div>
+
+                <div class="menu-item">
+                    <i class="fas fa-credit-card"></i> PAYMENTS
+                </div>
+                <div class="sub-menu">
+                    <div class="sub-menu-item">Gift Cards</div>
+                    <div class="sub-menu-item">Saved UPI</div>
+                    <div class="sub-menu-item">Saved Cards</div>
+                </div>
+
+                <div class="menu-item">
+                    <i class="fas fa-gift"></i> MY STUFF
+                </div>
+                <div class="sub-menu">
+                    <div class="sub-menu-item">My Coupons</div>
+                    <div class="sub-menu-item">My Reviews & Ratings</div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <!-- Profile Information Section -->
+                <div id="profile-info" class="content-section active">
+                    <div class="info-card">
+                        <div class="info-header">
+                            <div class="info-title">Your Name</div>
+                            <div class="edit-btn" onclick="toggleEditMode('profile')">Edit</div>
+                        </div>
+                        <div class="info-content">@Model.Name</div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-header">
+                            <div class="info-title">Email Address</div>
+                            <div class="edit-btn" onclick="toggleEditMode('profile')">Edit</div>
+                        </div>
+                        <div class="info-content">@Model.EmailAddress</div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-header">
+                            <div class="info-title">Mobile Number</div>
+                            <div class="edit-btn" onclick="toggleEditMode('profile')">Edit</div>
+                        </div>
+                        <div class="info-content">@Model.Phone</div>
+                    </div>
+
+                    <hr>
+
+                    <div class="section-title">
+                        <i class="fas fa-question-circle"></i> FAQs
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">What happens when I update my email address (or mobile number)?</div>
+                        <div class="faq-answer">Your login email id (or mobile number) changes, likewise. You'll receive all your account related communication on your updated email address (or mobile number).</div>
+                    </div>
+                </div>
+
+                <!-- Manage Address Section -->
+                <div id="manage-address" class="content-section">
+                    <div class="section-title">
+                        <i class="fas fa-map-marker-alt"></i> Your Addresses
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-header">
+                            <div class="info-title">Default Address</div>
+                            <div class="edit-btn" onclick="toggleEditMode('address')">Edit</div>
+                        </div>
+                        <div class="info-content">
+                            <p><strong>@Model.Name</strong></p>
+                            <p>@Model.Address</p>
+                            <p>@Model.City, @Model.PostalCode</p>
+                            <p>Phone: @Model.Phone</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-header">
+                            <div class="info-title">Other Addresses</div>
+                            <div class="edit-btn">Add New</div>
+                        </div>
+                        <div class="info-content">
+                            <p>No other addresses saved</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Profile Form (Hidden by default) -->
+                <div id="edit-profile" class="content-section">
+                    <div class="section-title">
+                        <i class="fas fa-user-edit"></i> Edit Profile Information
+                    </div>
+
+                    <form id="profile-form" asp-action="UpdateProfile" asp-controller="Customer" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="Name" value="@Model.Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="EmailAddress" value="@Model.EmailAddress">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mobile">Mobile Number</label>
+                            <input type="tel" id="mobile" name="Phone" value="@Model.Phone">
+                        </div>
+
+                        <button type="submit" class="btn-primary">Save Changes</button>
+                        <button type="button" class="edit-btn" onclick="cancelEdit('profile')" style="margin-left: 10px;">Cancel</button>
+                    </form>
+                </div>
+
+                <!-- Edit Address Form (Hidden by default) -->
+                <div id="edit-address" class="content-section">
+                    <div class="section-title">
+                        <i class="fas fa-edit"></i> Edit Address
+                    </div>
+
+                    <form id="address-form" asp-action="UpdateAddress" asp-controller="Customer" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <textarea id="address" name="Address">@Model.Address</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="City" value="@Model.City">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="postalCode">Postal Code</label>
+                            <input type="text" id="postalCode" name="PostalCode" value="@Model.PostalCode">
+                        </div>
+
+                        <button type="submit" class="btn-primary">Save Address</button>
+                        <button type="button" class="edit-btn" onclick="cancelEdit('address')" style="margin-left: 10px;">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        // Function to switch between content sections
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show the requested section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update active menu items
+            document.querySelectorAll('.sub-menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            const targetElement = document.querySelector(`.sub-menu-item[data-target="${sectionId}"]`);
+            if (targetElement) {
+                targetElement.classList.add('active');
+            }
+        }
+
+        // Function to toggle edit mode
+        function toggleEditMode(type) {
+            if (type === 'profile') {
+                // Show edit form
+                showSection('edit-profile');
+            } else if (type === 'address') {
+                // Show edit form
+                showSection('edit-address');
+            }
+        }
+
+        // Function to cancel edit
+        function cancelEdit(type) {
+            if (type === 'profile') {
+                showSection('profile-info');
+            } else if (type === 'address') {
+                showSection('manage-address');
+            }
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up menu item click handlers
+            document.querySelectorAll('.sub-menu-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    if (target) {
+                        showSection(target);
+                    }
+                });
+            });
+
+            // Handle form submissions with AJAX
+            $('#profile-form').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            // Update the displayed values
+                            $('.info-content').eq(0).text($('#name').val());
+                            $('.info-content').eq(1).text($('#email').val());
+                            $('.info-content').eq(2).text($('#mobile').val());
+
+                            // Show success message
+                            alert('Profile updated successfully!');
+
+                            // Return to profile view
+                            showSection('profile-info');
+                        } else {
+                            alert('Error updating profile: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error updating profile. Please try again.');
+                    }
+                });
+            });
+
+            $('#address-form').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            // Update the displayed address
+                            const addressContent = $('.info-content').eq(3);
+                            addressContent.html(`
+                                <p><strong>@Model.Name</strong></p>
+                                <p>${$('#address').val()}</p>
+                                <p>${$('#city').val()}, ${$('#postalCode').val()}</p>
+                                <p>Phone: @Model.Phone</p>
+                            `);
+
+                            // Show success message
+                            alert('Address updated successfully!');
+
+                            // Return to address view
+                            showSection('manage-address');
+                        } else {
+                            alert('Error updating address: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error updating address. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

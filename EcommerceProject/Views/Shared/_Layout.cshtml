@@ -1,0 +1,244 @@
+﻿@using EcommerceProject.Models
+@inject EcommerceProject.Service.CustomerService _customerService
+@using Microsoft.AspNetCore.Http
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EcommerceProject</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EcommerceProject.styles.css" asp-append-version="true" />
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        .nav-bar a {
+            text-decoration: none;
+            color: inherit;
+            align-items :center;
+        }
+
+        .menubar li a {
+            text-decoration: none;
+        }
+
+        .nav-bar a:hover {
+            color: #007bff;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+
+        /* ✅ Fix icon + text alignment */
+        .nav-bar li a {
+            display: inline-flex;
+
+            align-items: center;
+            gap: 6px; /* space between icon and text */
+           
+
+        }
+
+            .nav-bar li a svg {
+                vertical-align: middle;
+            }
+
+        /* ✅ Fix for cart icon border */
+        .cart-icon a.btn {
+            border: 1px solid #6c757d !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 12px;
+            text-decoration: none;
+        }
+
+            .cart-icon a.btn:hover {
+                border-color: #343a40 !important;
+                color: #fff !important;
+                text-decoration: none;
+            
+            }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="#"><img class="logo" src="img/logo2-removebg-preview.png" alt=""></a>
+
+        <ul class="nav-bar">
+            <li>
+                <a asp-controller="Home" asp-action="ProductView">
+
+                    <i class="fa-solid fa-house"></i>     home
+                </a>
+            </li>
+
+            @{
+                var customerName = Context.Session.GetString("CustomerName");
+                var customerEmail = Context.Session.GetString("CustomerEmail");
+            }
+
+            @if (!string.IsNullOrEmpty(customerName))
+            {
+                <li>
+                    <a asp-controller="Home" asp-action="ProductView" >Hello, @customerName</a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a asp-controller="Home" asp-action="CustomerLogin"> <i class="fa-solid fa-right-to-bracket"></i>Login</a>
+                </li>
+            }
+
+            <li><a asp-controller="Home" asp-action="SelleRregistration">  <i class="fa-solid fa-store"></i>   Become a seller</a></li>
+
+            <!-- ✅ Fixed cart icon - replaced button with anchor tag -->
+            <li class="cart-icon position-relative">
+                <a href="/Home/Cart" class="btn btn-outline-dark position-relative">
+                    <i class="fa-solid fa-cart-shopping fs-5"></i>
+                    <span id="cartCountBadge"
+                          class="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle">
+                        0
+                    </span>
+                </a>
+            </li>
+
+            <li>
+                <div class="threedot-container">
+                    <div class="threedot">
+                        <i class="fi fi-ss-menu-dots-vertical"></i>
+                    </div>
+
+                    <ul class="popup-menu">
+                        @* <li><a href="#">Settings</a></li> *@
+                        <li><a class="nav-link" asp-controller="Home" asp-action="CustomerDashBoard"> <i class="fa-solid fa-circle-user"></i> My Profile</a></li>
+                        <li>
+                            <a href="/Home/Wishlist" class="wishlist-link">
+                                <i class="fa-solid fa-heart"></i>  Wishlist
+                               
+                                <span id="wishlistCount" class="badge bg-danger">0</span>
+                            </a>
+                        </li>
+
+                        <li><a class="nav-link" asp-controller="Home" asp-action="MyOrders"> <i class="fa-solid fa-box"></i> My Orders</a></li>
+                        <li><a asp-controller="Home" asp-action="Logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </header>
+
+    <div class="hamburger-icon">
+        <i class="fi fi-br-menu-burger"></i>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-menu">
+        <div class="close-btn">&times;</div>
+        <ul>
+            <li>
+                <a asp-area="" asp-controller="home" asp-action="SellerLogin">SellerLogin</a>
+            </li>
+        </ul>
+    </div>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        var user = await _customerService.GetCustomerByEmailAsync(User.Identity.Name);
+        <span>Welcome, @user.Name!</span>
+    }
+    else
+    {
+        <a asp-controller="Home" asp-action="CustomerLogin">Login</a>
+    }
+
+    <div class="main-menu"></div>
+
+    <ul class="menubar">
+        <li><a href="#">Mobile Phones</a></li>
+        <li><a href="#">Fashion</a></li>
+        <li><a href="#">Electronics</a></li>
+        <li><a href="#">New Release</a></li>
+        <li><a href="#">Computer</a></li>
+    </ul>
+
+    <div>
+        <main>
+            @RenderBody()
+        </main>
+    </div>
+
+    <script>
+        function updateCartBadge() {
+            fetch('/Home/CartCount')
+                .then(res => res.json())
+                .then(count => document.getElementById('cartCountBadge').innerText = count);
+        }
+
+        function addToCart(productId) {
+            fetch(`/Home/AddToCart/${productId}`, { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("cartCountBadge").innerText = data.cartCount;
+
+                        if (document.getElementById("cart-items-container")) {
+                            const product = data.product;
+                            const card = document.createElement("div");
+                            card.classList.add("cart-item-card");
+                            card.id = `cart-item-${product.id}`;
+                            card.innerHTML = `
+                                <img src="${product.image}" width="80" />
+                                <div>
+                                    <h5>${product.name}</h5>
+                                    <p>${product.description}</p>
+                                    <span>₹${product.price}</span>
+                                    <button onclick="removeCartItem(${product.id})">Remove</button>
+                                </div>
+                            `;
+                            document.getElementById("cart-items-container").appendChild(card);
+                        }
+                    } else {
+                        alert(data.message || "Something went wrong!");
+                    }
+                });
+        }
+
+        function removeCartItem(productId) {
+            fetch(`/Home/RemoveCartItem/${productId}`, { method: 'POST' })
+                .then(res => {
+                    if (res.ok) {
+                        updateCartBadge();
+                        document.getElementById(`cart-item-${productId}`).remove();
+                    } else {
+                        alert("Something went wrong while removing item");
+                    }
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', updateCartBadge);
+    </script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

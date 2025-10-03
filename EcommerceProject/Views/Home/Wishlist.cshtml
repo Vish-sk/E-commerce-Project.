@@ -1,0 +1,30 @@
+﻿@using EcommerceProject.Views.Dto
+@model List<WishlistDTO>
+
+<h2>Your Wishlist</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>You have no items in your wishlist.</p>
+}
+else
+{
+    <div style="display:flex; flex-wrap:wrap; gap:20px;">
+        @foreach (var item in Model)
+        {
+            var cardId = "wishlist-item-" + item.ProductId;
+            <div id="@cardId" style="border: 1px solid #ccc; padding:10px; width:220px; border-radius: 8px; background: #fff;">
+                <a href="/Home/Productlayer?Id=@item.ProductId" style="text-decoration:none; color:inherit;">
+                    <img src="@item.ImagePath" alt="@item.ProductName" style="width:100%; height:180px; object-fit:contain; padding:10px; background:#f9f9f9;" />
+                    <h4>@item.ProductName</h4>
+                    <p>@item.Description</p>
+                    <strong>₹@item.Price</strong>
+                </a>
+                <button onclick="removeFromWishlist(@item.ProductId, '@cardId')"
+                        class="btn btn-danger btn-sm" style="margin-top:10px;">
+                    Remove
+                </button>
+            </div>
+        }
+    </div>
+}

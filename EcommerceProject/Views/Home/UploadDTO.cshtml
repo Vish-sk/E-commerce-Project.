@@ -1,0 +1,125 @@
+﻿@using EcommerceProject.Views.Dto
+@model UploadDTO
+
+@{
+	ViewData["Title"] = "UploadDTO";
+}
+
+<style>
+	.upload-body {
+		background: linear-gradient(135deg, #f9f9f9, #ffffff);
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 40px 15px;
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	}
+
+	.upload-card {
+		background: #fff;
+		padding: 30px 25px;
+		border-radius: 12px;
+		box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+		width: 100%;
+		max-width: 600px;
+	}
+
+		.upload-card h1 {
+			font-size: 28px;
+			font-weight: 700;
+			color: #111;
+			margin-bottom: 20px;
+		}
+
+	.form-label {
+		font-weight: 600;
+		color: #333;
+	}
+
+	.form-control {
+		border-radius: 8px;
+		border: 1px solid #007bff;
+		padding: 10px 12px;
+	}
+
+	.btn-custom {
+		border-radius: 8px;
+		padding: 10px 25px;
+		font-weight: 600;
+		transition: 0.3s;
+	}
+
+	.btn-success:hover {
+		background-color: #28a745cc;
+	}
+
+	.btn-primary:hover {
+		background-color: #0d6efdcc;
+	}
+
+	@@media(max - width: 576px)
+
+	{
+		.upload-card
+
+	{
+		padding: 20px 15px;
+	}
+
+	.btn-custom {
+		width: 48%;
+		padding: 10px 0;
+	}
+
+	}
+</style>
+
+<div class="upload-body">
+	<div class="upload-card">
+		<h1 class="text-center text-primary">VishCart</h1>
+
+		<hr class="mb-4" />
+		<form asp-action="UploadDTO" enctype="multipart/form-data" class="needs-validation" novalidate>
+			<div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-semibold"></div>
+
+			<div class="mb-3">
+				<label class="form-label fw-semibold">Select an Image:</label>
+				<input type="file" asp-for="ImageFile" class="form-control" />
+				<span asp-validation-for="ImageFile" class="text-danger small"></span>
+			</div>
+
+			<div class="mb-3">
+				<label asp-for="ProductName" class="form-label fw-semibold"></label>
+				<input asp-for="ProductName" class="form-control" />
+				<span asp-validation-for="ProductName" class="text-danger small"></span>
+			</div>
+
+			<div class="mb-3">
+				<label asp-for="Description" class="form-label fw-semibold"></label>
+				<input asp-for="Description" class="form-control" />
+				<span asp-validation-for="Description" class="text-danger small"></span>
+			</div>
+
+			<div class="mb-3">
+				<label asp-for="Price" class="form-label fw-semibold"></label>
+				<input asp-for="Price" class="form-control" />
+				<span asp-validation-for="Price" class="text-danger small"></span>
+			</div>
+
+			<div class="d-flex justify-content-center mt-4">
+				<button type="submit" class="btn btn-success btn-custom" >Upload</button>	
+			</div>
+		</form>
+	</div>
+
+	<div class="mt-4 text-center">
+		<a asp-action="Index" class="btn btn-outline-secondary btn-custom">Back to List</a>
+	</div>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

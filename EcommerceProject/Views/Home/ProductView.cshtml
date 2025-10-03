@@ -1,0 +1,399 @@
+﻿@using EcommerceProject.Views.Dto
+@model List<UploadDTO>
+
+<!-- Enhanced Slider -->
+<div class="slider-container">
+    <div class="slider">
+        <div class="slides">
+            <div class="slide active"><img src="\img\banner 1.png" alt="Special Offers"></div>
+            <div class="slide"><img src="\img\banner 2.png" alt="New Arrivals"></div>
+            <div class="slide"><img src="\img\banner 3.png" alt="Best Deals"></div>
+            <div class="slide"><img src="\img\banner 4.png" alt="Limited Time"></div>
+        </div>
+        <div class="arrow left">&#10094;</div>
+        <div class="arrow right">&#10095;</div>
+        <div class="dots-container">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced Product Grid -->
+<div class="products-grid">
+    @foreach (var product in Model)
+    {
+        var isInWishlist = ViewBag.WishlistIds != null && ((List<int>)ViewBag.WishlistIds).Contains(product.Id);
+
+        <div class="product-card">
+            <!-- Wishlist Button -->
+            <button onclick="toggleWishlist(this, '@product.Id')"
+                    class="wishlist-btn @(isInWishlist ? "active" : "")">
+                <i class="fa @(isInWishlist ? "fa-heart" : "fa-heart-o")"></i>
+            </button>
+
+            <a href="/Home/Productlayer?Id=@product.Id" class="product-link">
+                <div class="product-image">
+                    <img src="@product.ImagePath" alt="@product.ProductName" />
+                </div>
+                <div class="product-info">
+                    <h4 class="product-title">@product.ProductName</h4>
+                    <p class="product-desc">@product.Description</p>
+                    <div class="product-price">₹@product.Price</div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+
+<script src="~/js/wishlist.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script>
+
+    // Enhanced Slider Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const prevBtn = document.querySelector('.arrow.left');
+        const nextBtn = document.querySelector('.arrow.right');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            // Remove active class from all slides and dots
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            // Add active class to current slide and dot
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            let next = currentSlide + 1;
+            if (next >= slides.length) next = 0;
+            showSlide(next);
+        }
+
+        function prevSlide() {
+            let prev = currentSlide - 1;
+            if (prev < 0) prev = slides.length - 1;
+            showSlide(prev);
+        }
+
+        // Event listeners
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+
+        // Dot navigation
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => showSlide(index));
+        });
+
+        // Auto slide
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 4000);
+        }
+
+        function stopAutoSlide() {
+            clearInterval(slideInterval);
+        }
+
+        // Start auto slide
+        startAutoSlide();
+
+        // Pause on hover
+        const slider = document.querySelector('.slider');
+        slider.addEventListener('mouseenter', stopAutoSlide);
+        slider.addEventListener('mouseleave', startAutoSlide);
+    });
+</script>
+
+<style>
+    /* Enhanced Slider Styles */
+    .slider-container {
+        margin-bottom: 30px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .slider {
+        position: relative;
+        max-width: 100%;
+        overflow: hidden;
+        border-radius: 12px;
+    }
+
+    .slides {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+        display: none;
+        width: 100%;
+    }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+    .arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.8);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        @* color :black; *@
+    }
+
+        .arrow:hover {
+            background: black;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .arrow.left {
+            left: 20px;
+        }
+
+        .arrow.right {
+            right: 20px;
+        }
+
+    .dots-container {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        .dot:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+    /* Enhanced Product Grid */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 24px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        margin: 0 auto;
+        max-width: 1400px;
+    }
+
+    /* Enhanced Product Card */
+    .product-card {
+        background: #ffffff;
+        border: 1px solid #e8ecef;
+        border-radius: 12px;
+        padding: 16px;
+        position: relative;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        height: 100%;
+    }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-color: #d1d9e6;
+        }
+
+    /* Wishlist Button */
+    .wishlist-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(255,255,255,0.9);
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+        .wishlist-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .wishlist-btn.active,
+        .wishlist-btn .fa-heart {
+            color: #e74c3c;
+        }
+
+        .wishlist-btn:not(.active) {
+            color: #95a5a6;
+        }
+
+    /* Product Link */
+    .product-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        height: 100%;
+    }
+
+    /* Product Image */
+    .product-image {
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 12px;
+        background: #f8f9fa;
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10px;
+            transition: transform 0.3s ease;
+        }
+
+    .product-card:hover .product-image img {
+        transform: scale(1.05);
+    }
+
+    /* Product Info */
+    .product-info {
+        padding: 0 4px;
+    }
+
+    .product-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0 0 8px 0;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .product-desc {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        margin: 0 0 12px 0;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 40px;
+    }
+
+    .product-price {
+        color: #27ae60;
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .products-grid
+
+    {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .slide img {
+        height: 300px;
+    }
+
+    .arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+        .arrow.left {
+            left: 10px;
+        }
+
+        .arrow.right {
+            right: 10px;
+        }
+
+    }
+
+    @@media (max-width: 480px) {
+        .products-grid
+
+    {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .product-card {
+        padding: 12px;
+    }
+
+    .product-image {
+        height: 150px;
+    }
+
+    .slide img {
+        height: 200px;
+    }
+
+    }
+</style>
